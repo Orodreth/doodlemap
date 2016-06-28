@@ -7,10 +7,10 @@
     Create a controller using this template
 """
 from system.core.controller import *
-from flask import redirect, request
-class Home(Controller):
+
+class Map(Controller):
     def __init__(self, action):
-        super(Home, self).__init__(action)
+        super(Map, self).__init__(action)
         """
         This is an example of loading a model.
         Every controller has access to the load_model method.
@@ -36,9 +36,14 @@ class Home(Controller):
 
         # return self.load_view('index.html', messages=messages, user=user)
         """
-        return self.load_view('home/home.html')
 
-    def search(self):
-        session['address'] = request.form['address']
+        data = {
+            'address': session['address'],
+            'key': 'AIzaSyB6qaM40Um39N4vywpaU_Hj5NwoD2FB3PA'
+        }
 
-        return redirect('/map')
+        url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + data['address'] + "&key=" + data['key']
+        response = requests.get(url).content
+        print response
+        return self.load_view('map/map.html', location=session['address'])
+
