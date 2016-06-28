@@ -1,8 +1,22 @@
+<!DOCTYPE html>
 <html>
   <head>
-    <link rel="stylesheet" href="/static/css/styles.css" type="text/css">
+    <meta charset="utf-8">
+    <title>DooDle Maps</title>
+    <style>
+    h1{
+      text-align: center;
+    }
+    form{
+      text-align: center;
+    }
+    </style>
   </head>
   <body>
-    The best place to start is the "WelcomeController.py" file in app/controllers.
+    <h1>Doodle Maps</h1>
+    <form action="/process" method="post">
+      <input type="text" name="searchbox">
+      <input type="submit" name="searchbutton" value="Search">
+    </form>
   </body>
 </html>

@@ -7,7 +7,7 @@
     Create a controller using this template
 """
 from system.core.controller import *
-
+import geocoder
 class Welcome(Controller):
     def __init__(self, action):
         super(Welcome, self).__init__(action)
@@ -19,22 +19,34 @@ class Welcome(Controller):
         self.db = self._app.db
 
         """
-        
-        This is an example of a controller method that will load a view for the client 
+
+        This is an example of a controller method that will load a view for the client
 
         """
-   
+
     def index(self):
         """
-        A loaded model is accessible through the models attribute 
+        A loaded model is accessible through the models attribute
         self.models['WelcomeModel'].get_users()
-        
+
         self.models['WelcomeModel'].add_message()
         # messages = self.models['WelcomeModel'].grab_messages()
         # user = self.models['WelcomeModel'].get_user()
         # to pass information on to a view it's the same as it was with Flask
-        
+
         # return self.load_view('index.html', messages=messages, user=user)
         """
         return self.load_view('index.html')
 
+    def process(self):
+        location = request.form['searchbox']
+        g = geocoder.google(location)
+        g = g.geojson
+        session['lat'] = g['geometry']['coordinates'][0]
+        print session['lat']
+        session['lng'] = g['geometry']['coordinates'][1]
+        print session['lng']
+        return redirect('/display')
+
+    def display(self):
+        return self.load_view('map.html', lat = session['lat'], lng = session['lng'])
