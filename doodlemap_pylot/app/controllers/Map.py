@@ -7,6 +7,9 @@
     Create a controller using this template
 """
 from system.core.controller import *
+from flask import redirect, request, session
+import geocoder
+
 
 class Map(Controller):
     def __init__(self, action):
@@ -37,13 +40,13 @@ class Map(Controller):
         # return self.load_view('index.html', messages=messages, user=user)
         """
 
-        data = {
-            'address': session['address'],
-            'key': 'AIzaSyB6qaM40Um39N4vywpaU_Hj5NwoD2FB3PA'
-        }
+        # initial_location = session['address']
+        # g = geocoder.google(initial_location)
+        # g = g.geojson
+        # session['lat'] = g['geometry']['coordinates'][0]
+        # print session['lat']
+        # session['lng'] = g['geometry']['coordinates'][1]
+        # print session['lng']
 
-        url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + data['address'] + "&key=" + data['key']
-        response = requests.get(url).content
-        print response
-        return self.load_view('map/map.html', location=session['address'])
-
+        # return self.load_view('map/map.html', location=session['address'])
+        return self.load_view('map/map.html', location=session['address'], latitude=session['latitude'], longitude=session['longitude'])

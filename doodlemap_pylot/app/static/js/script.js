@@ -1,4 +1,4 @@
-//TODO: FIND HOW TO DISPLAY VALUES THAT ARE WITHIN A SPECIFIC RADIUS
+//TODO: FIND HOW TO CENTER VALUES FOR THOSE THAT ARE PART OF LARGER AREAS SUCH AS HONG KONG
 //TODO: USE PLACE SEARCH PAGINATION FOR SURVEY PART
 
 var mapDiv = document.getElementById('map');
@@ -8,22 +8,41 @@ var marker;
 var latitude;
 var longitude;
 
+function search_input() {
+
+    var search_bar = new google.maps.places.Autocomplete(document.getElementById('address'));
+
+    // search_bar.addListener('place_changed', function() {
+    //     var place = search_bar.getPlace();
+    //     console.log(place['place_id']);
+    //     return place['place_id'];
+    // });
+
+}
+
 /////////////////// CREATING MAP //////////////////////////
 function initialize() {
     geocoder = new google.maps.Geocoder();
+
+    // var new_location = search_input(address);
+    // console.log(new_location);
+    // var search_bar = search_input();
     var address = $('#initial_location').val();
     geocoder.geocode({'address': address}, function (results, status) {
         if (status == google.maps.GeocoderStatus.OK) {
+
             ///////// SETTING THE INITAL POSITION /////////////
-            latitude = results[0].geometry.location.lat();
-            longitude = results[0].geometry.location.lng();
-            var LatLng = new google.maps.LatLng(latitude, longitude);
-            console.log(LatLng);
+            // latitude = results[0].geometry.location.lat();
+            // longitude = results[0].geometry.location.lng();
+            // var LatLng = new google.maps.LatLng(latitude, longitude);
+            // console.log(LatLng);
+            var LatLng = new google.maps.LatLng($('#initial_latitude').val(),
+                                                $('#initial_longitude').val());
 
             ///////// CREATING MAP RELATIVE TO INITIAL LOCATION ////////////
             map = new google.maps.Map(mapDiv, {
                 center: LatLng,
-                zoom: 13,
+                zoom: 15,
                 mapTypeId: google.maps.MapTypeId.ROADMAP
                 //TODO: FIGURE OUT WHY CONTROLS WON'T ADJUST POSITIONS
                 // mapTypeControlOptions: {
@@ -44,23 +63,31 @@ function initialize() {
             });
 
             var input = document.getElementById('pac-input');
-            var search_bar = new google.maps.places.Autocomplete(input);
-            var infowindow = new google.maps.InfoWindow({
+            var new_search_bar = new google.maps.places.Autocomplete(input);
+            // var infowindow = new google.maps.InfoWindow({
+            //
+            //
+            // });
 
-
-            });
-
-            search_bar.bindTo('bounds', map);
+            new_search_bar.bindTo('bounds', map);
             map.controls[google.maps.ControlPosition.TOP_RIGHT].push(input);
+            ////////////// INFO WINDOW EVENT /////////////////
+            var infowindow = new google.maps.InfoWindow();
+
+            marker.addListener('click', function() {
+                infowindow.open(map, marker);
+            });
 
             //TODO: ADD A LISTENER TO MARKER TO OPEN SIDE PANEL
             //TODO: USE SEARCH PAGINATION TO DO SO
             // marker.addListener('click', function() {
             //   infowindow.open(map, marker);
             // });
-
-            search_bar.addListener('place_changed', function() {
-                var place = search_bar.getPlace();
+            new_search_bar.addListener('place_changed', function() {
+                var place = new_search_bar.getPlace();
+                infowindow = new google.maps.InfoWindow({
+                    content: place.place_id
+                })
                 if (!place.geometry) {
                     return;
                 }
@@ -69,8 +96,9 @@ function initialize() {
                     map.fitBounds(place.geometry.viewport);
                 } else {
                     map.setCenter(place.geometry.location);
-                    map.setZoom(17);
+                    map.setZoom(15);
                 }
+
 
                 // Set the position of the marker using the place ID and location.
                 marker.setPlace({
@@ -80,6 +108,7 @@ function initialize() {
                     // animation: google.maps.Animation.DROP,
                     location: place.geometry.location
                 });
+
                 marker.setVisible(true);
             });
         } else {

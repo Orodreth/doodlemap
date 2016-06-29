@@ -7,10 +7,13 @@
     Create a controller using this template
 """
 from system.core.controller import *
-from flask import redirect, request
-class Home(Controller):
+from flask import redirect, request, session
+import json
+import geocoder
+
+class Welcome(Controller):
     def __init__(self, action):
-        super(Home, self).__init__(action)
+        super(Welcome, self).__init__(action)
         """
         This is an example of loading a model.
         Every controller has access to the load_model method.
@@ -36,9 +39,65 @@ class Home(Controller):
 
         # return self.load_view('index.html', messages=messages, user=user)
         """
-        return self.load_view('home/home.html')
+        return self.load_view('index.html')
+
+    # data = {
+    #     'address': session['address'],
+    #     'key': 'AIzaSyB6qaM40Um39N4vywpaU_Hj5NwoD2FB3PA'
+    # }
+    #
+    # url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + data['address'] + "&key=" + data['key']
+    # response = requests.get(url).content
+
+    # initial_location = session['address']
+    # g = geocoder.google(initial_location)
+    # g = g.geojson
+    # session['lat'] = g['geometry']['coordinates'][0]
+    # print session['lat']
+    # session['lng'] = g['geometry']['coordinates'][1]
+    # print session['lng']
+
+
+
 
     def search(self):
-        session['address'] = request.form['address']
+
+        print request.form['address']
+
+        initial_location = request.form['address']
+        g = geocoder.google(initial_location)
+        geo = g.geojson
+        print geo['properties']['address']
+        print geo['properties']['lat']
+        print geo['properties']['lng']
+
+        session['address'] = geo['properties']['address']
+        session['latitude'] = geo['properties']['lat']
+        session['longitude'] = geo['properties']['lng']
+        # places_data = {
+        #     'input': request.form['address'],
+        #     'key': 'AIzaSyB6qaM40Um39N4vywpaU_Hj5NwoD2FB3PA'
+        # }
+		#
+        # places_url = 'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=' \
+        #              + places_data['input'] +'&key='+ places_data['key']
+        # json_places = requests.get(places_url).content
+        # places_response = json.loads(json_places)
+        # print json_places
+        # print places_response['predictions'][0]['place_id']
+
+        # places_details_data = {
+        #    'placeid': places_response['predictions'][0]['place_id'],
+        #     'key': 'AIzaSyB6qaM40Um39N4vywpaU_Hj5NwoD2FB3PA'
+        # }
+        #
+        # places_details_url = 'https://maps.googleapis.com/maps/api/place/details/json?placeid='\
+        #             + places_details_data['placeid'] +'&key='+ places_details_data['key']
+        # json_detail_places = requests.get(places_details_url).content
+        # places_details_response = json.loads(json_detail_places)
+        # session['address'] = places_details_response['result']['formatted_address']
+        #
+        # print places_details_response
+        # print places_details_response['result']['formatted_address']
 
         return redirect('/map')

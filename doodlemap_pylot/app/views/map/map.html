@@ -12,10 +12,11 @@
 </head>
 <body>
 
-	<h1>Hello world</h1>
 	<input id="pac-input" class="controls" type="text" placeholder="Search Box">
 	<div id="map">
 		<input id="initial_location" type="hidden" name="location" value="{{location}}">
+		<input id="initial_latitude" type="hidden" name="location" value="{{latitude}}">
+		<input id="initial_longitude" type="hidden" name="location" value="{{longitude}}">
 	</div>
 
 	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB6qaM40Um39N4vywpaU_Hj5NwoD2FB3PA&libraries=places&callback=initialize"></script>
