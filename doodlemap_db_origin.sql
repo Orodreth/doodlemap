@@ -158,8 +158,8 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `doodlemap_db`.`configs` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `key` VARCHAR(255) NULL,
-  `value` VARCHAR(255) NULL,
+  `conf_key` VARCHAR(255) NULL,
+  `conf_value` VARCHAR(255) NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 

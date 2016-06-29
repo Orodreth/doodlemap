@@ -12,11 +12,14 @@ class User(Model):
     #     "pwd_confirm"
     # }
     def create_user(self, user):
-        sql = "select * from configs where conf_key in ('email_regex', 'pwd_len') order by id"
-        result = self.db.query_db(sql)
+        # sql = "select * from configs where conf_key in ('email_regex', 'pwd_len') order by id"
+        # result = self.db.query_db(sql)
 
-        email_regex = re.compile(result[0]["conf_value"])
-        pwd_len = int(result[1]["conf_value"])
+        # email_regex = re.compile(result[0]["conf_value"])
+        # pwd_len = int(result[1]["conf_value"])
+
+        email_regex = re.compile(r'^[a-za-z0-9\.\+_-]+@[a-za-z0-9\._-]+\.[a-za-z]*$')
+        pwd_len = 8
 
         error = ""
 
