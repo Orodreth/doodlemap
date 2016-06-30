@@ -1,20 +1,19 @@
 $(document).ready(function(){
     $("#left-panel").slideDown("slow").tabs();
-
     var counter = 1;
       $(".add").click(function(){
-
         console.log(counter);
         counter++;
         if (counter > 4){
           alert("Maximum 4 options for each survey!");
+          counter--;
           return false;
         }else{
             $('#newvote').append('<div id="vote'+ counter+ '" ><p>Options: </p><input type="text" name="option'+counter+'"> <input type="button" onclick="deleteTheEntireRow()" class="btn btn-secondary-outline remove" value="Remove"></div>');
         }
       });
-      $(".remove").click(function(){
-        $(this).parent().remove();
+      $('.remove').click(function(){
+        $(this).parent('div').remove();
         counter--;
       });
 });
@@ -51,7 +50,7 @@ function initialize() {
     longitude = document.getElementById('initial_longitude').value;
 
     console.log('initial address');
-    console.log(address);
+    console.log(document.getElementById('initial_location').value);
     console.log(id);
     console.log(latitude);
     console.log(longitude);
@@ -112,13 +111,17 @@ function initialize() {
                 latitude = new_place.geometry.location.lat();
                 longitude = new_place.geometry.location.lng();
 
+                document.getElementById('initial_location').value = address;
+                document.getElementById('initial_id').value = id;
+                document.getElementById('initial_latitude').value = latitude;
+                document.getElementById('initial_longitude').value = longitude;
 
 
                 console.log('new address');
-                console.log(address);
-                console.log(id);
-                console.log(latitude);
-                console.log(longitude);
+                console.log(document.getElementById('initial_location').value);
+                console.log(document.getElementById('initial_id').value );
+                console.log(document.getElementById('initial_latitude').value);
+                console.log(document.getElementById('initial_longitude').value);
                 // console.log($('#initial_id').val());
                 // console.log($('#initial_latitude').val());
                 // console.log($('#initial_longitude').val());
@@ -170,7 +173,7 @@ function initialize() {
 
                 $.get('/welcome/refresh', function (res) {
 
-                });
+                }, "json");
             });
         } else {
             alert("Geocode was not successful for the following reason: " + status);

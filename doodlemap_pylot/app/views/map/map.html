@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -6,6 +6,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 	<script src="static/js/bootstrap.min.js"></script>
 	<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+	<script src="https://use.fontawesome.com/4a623090bc.js"></script>
 
 	<link rel="stylesheet" href="static/css/bootstrap.min.css">
 	<link rel="stylesheet" href="static/css/stylesheet.css">
@@ -24,9 +25,9 @@
 
 	<div id="left-panel">
         <ul class="nav nav-tabs">
-          <li class="active"><a href="#info_tab" data-toggle="tab">Info</a></li>
-          <li><a href="#media_tab" data-toggle="tab">Media</a></li>
-          <li><a href="#survey_tab" data-toggle="tab">Survey</a></li>
+          <li class="active"><a href="#survey_tab" data-toggle="tab"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Survey</a></li>
+          <li><a href="#info_tab" data-toggle="tab"><i class="fa fa-home fa-fw" aria-hidden="true"></i> Info</a></li>
+          <li><a href="#media_tab" data-toggle="tab"><i class="fa fa-font-awesome" aria-hidden="true"></i> Media</a></li>
         </ul>
 
 		<div class="tab-content clearfix">
@@ -67,7 +68,7 @@
             </div>
         </div>
 	</div>
-	<script src="static/js/script.js"></script>
 	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB6qaM40Um39N4vywpaU_Hj5NwoD2FB3PA&libraries=places&callback=initialize"></script>
+	<script src="static/js/script.js"></script>
 </body>
 </html>

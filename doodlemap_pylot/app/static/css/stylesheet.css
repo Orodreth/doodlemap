@@ -42,7 +42,6 @@ html, body{
 #left-panel {
   font-family: 'Roboto','sans-serif';
   display: none;
-  overflow: scroll;
   line-height: 30px;
   padding-left: 10px;
   position: absolute;
