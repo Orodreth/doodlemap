@@ -49,4 +49,4 @@ class Map(Controller):
         # print session['lng']
 
         # return self.load_view('map/map.html', location=session['address'])
-        return self.load_view('map/map.html', location=session['address'], latitude=session['latitude'], longitude=session['longitude'])
+        return self.load_view('map/map.html', location=session['address'], latitude=session['latitude'], longitude=session['longitude'], place_id=session['placeid'])

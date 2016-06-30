@@ -5,6 +5,7 @@
     <title>Maps</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 	<script src="static/js/bootstrap.min.js"></script>
+	<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 
 	<link rel="stylesheet" href="static/css/bootstrap.min.css">
 	<link rel="stylesheet" href="static/css/stylesheet.css">
@@ -13,10 +14,34 @@
 <body>
 
 	<input id="pac-input" class="controls" type="text" placeholder="Search Box">
+
 	<div id="map">
 		<input id="initial_location" type="hidden" name="location" value="{{location}}">
-		<input id="initial_latitude" type="hidden" name="location" value="{{latitude}}">
-		<input id="initial_longitude" type="hidden" name="location" value="{{longitude}}">
+		<input id="initial_latitude" type="hidden" name="latitude" value="{{latitude}}">
+		<input id="initial_longitude" type="hidden" name="longitude" value="{{longitude}}">
+		<input id="initial_id" type="hidden" name="id" value="{{place_id}}">
+	</div>
+
+	<div id="left-panel">
+        <ul class="nav nav-tabs">
+          <li class="active"><a href="#tabs-1" data-toggle="tab">Info</a></li>
+          <li><a href="#tabs-2" data-toggle="tab">Media</a></li>
+          <li><a href="#tabs-3" data-toggle="tab">Survey</a></li>
+        </ul>
+
+        <div class="tab-content clearfix">
+			<div class="tab-pane active" id="info_tab">
+
+			</div>
+
+			<div class="tab-pane" id="media_tab">
+				<p>bababababababababababababb</p>
+			</div>
+
+			<div class="tab-pane" id="survey_tab">
+				<p>lalalalalalalallalalalalal</p>
+			</div>
+		</div>
 	</div>
 
 	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB6qaM40Um39N4vywpaU_Hj5NwoD2FB3PA&libraries=places&callback=initialize"></script>

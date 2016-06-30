@@ -23,36 +23,20 @@ function search_input() {
 /////////////////// CREATING MAP //////////////////////////
 function initialize() {
     geocoder = new google.maps.Geocoder();
-
-    // var new_location = search_input(address);
-    // console.log(new_location);
-    // var search_bar = search_input();
     var address = $('#initial_location').val();
+    var place_id = $('#initial_id').val()
     geocoder.geocode({'address': address}, function (results, status) {
         if (status == google.maps.GeocoderStatus.OK) {
 
-            ///////// SETTING THE INITAL POSITION /////////////
-            // latitude = results[0].geometry.location.lat();
-            // longitude = results[0].geometry.location.lng();
-            // var LatLng = new google.maps.LatLng(latitude, longitude);
-            // console.log(LatLng);
             var LatLng = new google.maps.LatLng($('#initial_latitude').val(),
-                                                $('#initial_longitude').val());
+                $('#initial_longitude').val());
 
             ///////// CREATING MAP RELATIVE TO INITIAL LOCATION ////////////
             map = new google.maps.Map(mapDiv, {
                 center: LatLng,
                 zoom: 15,
-                mapTypeId: google.maps.MapTypeId.ROADMAP
-                //TODO: FIGURE OUT WHY CONTROLS WON'T ADJUST POSITIONS
-                // mapTypeControlOptions: {
-                //   style: google.maps.MapTypeControlStyle.DROPDOWN_MENU,
-                //   position: TOP_RIGHT,
-                //   mapTypeIds: [
-                //     google.maps.MapTypeId.ROADMAP,
-                //     google.maps.MapTypeId.TERRAIN
-                //   ]
-                // }
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                mapTypeControl: false
             });
 
             ///////// CREATING MARKER RELATIVE TO INITIAL LOCATION////////////
@@ -63,31 +47,29 @@ function initialize() {
             });
 
             var input = document.getElementById('pac-input');
+
             var new_search_bar = new google.maps.places.Autocomplete(input);
-            // var infowindow = new google.maps.InfoWindow({
-            //
-            //
-            // });
-
             new_search_bar.bindTo('bounds', map);
-            map.controls[google.maps.ControlPosition.TOP_RIGHT].push(input);
-            ////////////// INFO WINDOW EVENT /////////////////
-            var infowindow = new google.maps.InfoWindow();
+            map.controls[google.maps.ControlPosition.TOP_CENTER].push(input);
 
-            marker.addListener('click', function() {
-                infowindow.open(map, marker);
+            var service = new google.maps.places.PlacesService(map);
+
+            /////////////  GETTING PLACE DETAILS //////////////
+
+            service.getDetails(request={ placeId: place_id }, function callback(place, status) {
+                if (status == google.maps.places.PlacesServiceStatus.OK) {
+                    console.log(place.place_id);
+                    marker.addListener('click', function () {
+                        $('#info_tab').html('<p>'+ place.place_id + '</p>');
+                    });
+                }
             });
 
-            //TODO: ADD A LISTENER TO MARKER TO OPEN SIDE PANEL
-            //TODO: USE SEARCH PAGINATION TO DO SO
-            // marker.addListener('click', function() {
-            //   infowindow.open(map, marker);
-            // });
-            new_search_bar.addListener('place_changed', function() {
+            ///////////////////////////////////////////////////
+
+            new_search_bar.addListener('place_changed', function () {
                 var place = new_search_bar.getPlace();
-                infowindow = new google.maps.InfoWindow({
-                    content: place.place_id
-                })
+
                 if (!place.geometry) {
                     return;
                 }
@@ -98,7 +80,6 @@ function initialize() {
                     map.setCenter(place.geometry.location);
                     map.setZoom(15);
                 }
-
 
                 // Set the position of the marker using the place ID and location.
                 marker.setPlace({
@@ -117,14 +98,11 @@ function initialize() {
     });
 }
 
+$(document).ready(function () {
+    $("#left-panel").slideDown("slow");
+    $("#left-panel").tabs();
 
-/////////////// SEARCH SECTION /////////////////////////
-
-//when a button is clicked, first print out the json format
-//you want the geocoder to get the location of the address input
-//after you get the location have the map function create the map with a marker at that specific location
-
-// var searchBox = new google.maps.places.SearchBox($('#address').value());
+})
 
 
 
