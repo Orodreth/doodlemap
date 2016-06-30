@@ -1,10 +1,32 @@
-//TODO: FIND HOW TO CENTER VALUES FOR THOSE THAT ARE PART OF LARGER AREAS SUCH AS HONG KONG
-//TODO: USE PLACE SEARCH PAGINATION FOR SURVEY PART
+$(document).ready(function(){
+    $("#left-panel").slideDown("slow").tabs();
 
-var mapDiv = document.getElementById('map');
+    var counter = 1;
+      $(".add").click(function(){
+
+        console.log(counter);
+        counter++;
+        if (counter > 4){
+          alert("Maximum 4 options for each survey!");
+          return false;
+        }else{
+            $('#newvote').append('<div id="vote'+ counter+ '" ><p>Options: </p><input type="text" name="option'+counter+'"> <input type="button" onclick="deleteTheEntireRow()" class="btn btn-secondary-outline remove" value="Remove"></div>');
+        }
+      });
+      $(".remove").click(function(){
+        $(this).parent().remove();
+        counter--;
+      });
+});
+
+//TODO: FIND HOW TO RESET SESSION VALUE
+
+var mapDiv = mapDiv = document.getElementById('map');
 var geocoder;
 var map;
 var marker;
+var address;
+var id;
 var latitude;
 var longitude;
 
@@ -15,7 +37,6 @@ function search_input() {
     // search_bar.addListener('place_changed', function() {
     //     var place = search_bar.getPlace();
     //     console.log(place['place_id']);
-    //     return place['place_id'];
     // });
 
 }
@@ -23,13 +44,22 @@ function search_input() {
 /////////////////// CREATING MAP //////////////////////////
 function initialize() {
     geocoder = new google.maps.Geocoder();
-    var address = $('#initial_location').val();
-    var place_id = $('#initial_id').val()
+
+    address = document.getElementById('initial_location').value;
+    id = document.getElementById('initial_id').value;
+    latitude = document.getElementById('initial_latitude').value;
+    longitude = document.getElementById('initial_longitude').value;
+
+    console.log('initial address');
+    console.log(address);
+    console.log(id);
+    console.log(latitude);
+    console.log(longitude);
+
     geocoder.geocode({'address': address}, function (results, status) {
         if (status == google.maps.GeocoderStatus.OK) {
 
-            var LatLng = new google.maps.LatLng($('#initial_latitude').val(),
-                $('#initial_longitude').val());
+            var LatLng = new google.maps.LatLng(latitude, longitude);
 
             ///////// CREATING MAP RELATIVE TO INITIAL LOCATION ////////////
             map = new google.maps.Map(mapDiv, {
@@ -45,66 +75,108 @@ function initialize() {
                 animation: google.maps.Animation.DROP,
                 map: map
             });
-
+            ///////// CREATING SEARCH BAR////////////
             var input = document.getElementById('pac-input');
-
             var new_search_bar = new google.maps.places.Autocomplete(input);
             new_search_bar.bindTo('bounds', map);
             map.controls[google.maps.ControlPosition.TOP_CENTER].push(input);
-
+            $('#info_tab').html("");
             var service = new google.maps.places.PlacesService(map);
 
             /////////////  GETTING PLACE DETAILS //////////////
-
-            service.getDetails(request={ placeId: place_id }, function callback(place, status) {
+            service.getDetails(request={ placeId: id }, function callback(place, status) {
                 if (status == google.maps.places.PlacesServiceStatus.OK) {
                     console.log(place.place_id);
+
                     marker.addListener('click', function () {
-                        $('#info_tab').html('<p>'+ place.place_id + '</p>');
+                        ////////////// ADDING TO INFO TAB ///////////////
+                        $('#info_tab').html('<p>'+ place.place_id + '</p>' + '<p>' + place["rating"] + '</p>'
+                                        + "<img src="+place.photos[0].getUrl({'maxWidth': 500, 'maxHeight': 500}) + ">");
+                        /////////////////////////////////////////////////
+
+                        ////////////// ADDING TO MEDIA TAB //////////////
+                        /////////////////////////////////////////////////
+
+                        // //////////// ADDING TO SURVEY TAB //////////////
+                        //////////////////////////////////////////////////
                     });
                 }
             });
 
-            ///////////////////////////////////////////////////
-
+            ///////// CHECKING NEW INPUT VALUES IN SEARCH BAR////////////
             new_search_bar.addListener('place_changed', function () {
-                var place = new_search_bar.getPlace();
+                var new_place = new_search_bar.getPlace();
+                console.log(new_place);
+                address = new_place.formatted_address;
+                id = new_place.place_id;
+                latitude = new_place.geometry.location.lat();
+                longitude = new_place.geometry.location.lng();
 
-                if (!place.geometry) {
+
+
+                console.log('new address');
+                console.log(address);
+                console.log(id);
+                console.log(latitude);
+                console.log(longitude);
+                // console.log($('#initial_id').val());
+                // console.log($('#initial_latitude').val());
+                // console.log($('#initial_longitude').val());
+
+                // console.log($('#initial_location').val(new_place['formatted_address']));
+                // console.log($('#initial_id').val());
+                // console.log($('#initial_latitude').val());
+                // console.log($('#initial_longitude').val());
+
+                service.getDetails(request={ placeId:new_place.place_id }, function callback(new_place, status) {
+                    if (status == google.maps.places.PlacesServiceStatus.OK) {
+                        marker.addListener('click', function () {
+                            ////////////// ADDING TO INFO TAB ///////////////
+                            $('#info_tab').html('<p>'+ new_place.place_id + '</p>'
+                                                    + '<p>' + new_place["rating"] + '</p>'
+                                                    + "<img src="+new_place.photos[0].getUrl({'maxWidth': 500, 'maxHeight': 500}) + ">");
+                            /////////////////////////////////////////////////
+
+                            ////////////// ADDING TO MEDIA TAB //////////////
+                            /////////////////////////////////////////////////
+
+                            ////////////// ADDING TO SURVEY TAB //////////////
+                            //////////////////////////////////////////////////
+                        });
+                    }
+                });
+
+                if (!new_place.geometry) {
                     return;
                 }
 
-                if (place.geometry.viewport) {
-                    map.fitBounds(place.geometry.viewport);
+                if (new_place.geometry.viewport) {
+                    map.fitBounds(new_place.geometry.viewport);
                 } else {
-                    map.setCenter(place.geometry.location);
+                    map.setCenter(new_place.geometry.location);
                     map.setZoom(15);
                 }
 
-                // Set the position of the marker using the place ID and location.
+                // Set the position of the marker using the new_place ID and location.
                 marker.setPlace({
-                    placeId: place.place_id,
+                    placeId: new_place.place_id,
                     //TODO: FIGURE OUT WHY DROP ANIMATION ISN'T WORKING
                     //TODO: WHEN SEARCHING FOR NEW LOCATION
                     // animation: google.maps.Animation.DROP,
-                    location: place.geometry.location
+                    location: new_place.geometry.location
                 });
 
                 marker.setVisible(true);
+
+                $.get('/welcome/refresh', function (res) {
+
+                });
             });
         } else {
             alert("Geocode was not successful for the following reason: " + status);
         }
     });
 }
-
-$(document).ready(function () {
-    $("#left-panel").slideDown("slow");
-    $("#left-panel").tabs();
-
-})
-
-
 
 ///////////////////// GET CURRENT LOCATION ///////////////////
 // var initialLocation;

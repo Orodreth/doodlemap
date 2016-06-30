@@ -42,6 +42,7 @@ html, body{
 #left-panel {
   font-family: 'Roboto','sans-serif';
   display: none;
+  overflow: scroll;
   line-height: 30px;
   padding-left: 10px;
   position: absolute;
@@ -67,4 +68,33 @@ html, body{
 h2 {
   font-size: 22px;
   margin: 0 0 5px 0;
+}
+.votes{
+  border: solid black;
+  font-family: fantasy;
+  width: 200px;
+  height: 80px;
+  margin: 20px;
+  background-color:rgba(180, 176, 164, 0.57);
+}
+#existedvote{
+  font-family: fantasy;
+  overflow: auto;
+  width: 320px;
+  height: 500px;
+}
+#fix{
+  font-family: fantasy;
+  margin: 20px;
+  overflow: auto;
+  height: 200px;
+}
+textarea{
+  resize:none;
+}
+.add{
+  color: white;
+  font-size: 8px;
+  width: 200px;
+  height: 30px;
 }

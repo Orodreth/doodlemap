@@ -28,25 +28,15 @@ class Map(Controller):
         """
 
     def index(self):
-        """
-        A loaded model is accessible through the models attribute
-        self.models['WelcomeModel'].get_users()
 
-        self.models['WelcomeModel'].add_message()
-        # messages = self.models['WelcomeModel'].grab_messages()
-        # user = self.models['WelcomeModel'].get_user()
-        # to pass information on to a view it's the same as it was with Flask
+        print session['address']
+        print session['latitude']
+        print session['longitude']
+        print session['placeid']
 
-        # return self.load_view('index.html', messages=messages, user=user)
-        """
+        # session['address'] = request.form['location']
+        # session['latitude'] = request.form['latitude']
+        # session['longitude'] = request.form['longitude']
+        # session['placeid'] = request.form['id']
 
-        # initial_location = session['address']
-        # g = geocoder.google(initial_location)
-        # g = g.geojson
-        # session['lat'] = g['geometry']['coordinates'][0]
-        # print session['lat']
-        # session['lng'] = g['geometry']['coordinates'][1]
-        # print session['lng']
-
-        # return self.load_view('map/map.html', location=session['address'])
-        return self.load_view('map/map.html', location=session['address'], latitude=session['latitude'], longitude=session['longitude'], place_id=session['placeid'])
+        return self.load_view('map/map.html', address=session['address'], latitude=session['latitude'], longitude=session['longitude'], place_id=session['placeid'])
