@@ -12,14 +12,21 @@
 
 </head>
 <body>
-	<h1>Doodle Maps</h1>
+	<hr>
+	<center><img id="doodlelogo" src="/static/image/doodlemaplogo.PNG" alt="logo" width="600" height="300"></center>
 
 	<!--TODO: HOME PAGE STILL DOESN'T WORK WITH SPECIFIC BUILDINGS FIX-->
 
-	<form action="/welcome/search" method="post">
+	<form action="/welcome/search" method="post" id="searchbox">
 		<input id="address" type="search" name="address">
-		<input type="submit" value="Search">
+		<input type="submit" class="btn btn-primary" value="Search">
 	</form>
+
+	{% if user_id == 0 %}
+		<a href="/login" class="log">Login</a>
+	{% else %}
+		<a href="/logout" class="log">Logout</a>
+	{% endif %}
 
 	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB6qaM40Um39N4vywpaU_Hj5NwoD2FB3PA&libraries=places&callback=search_input"></script>
 	<script src="static/js/script.js"></script>

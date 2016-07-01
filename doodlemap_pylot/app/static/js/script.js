@@ -1,24 +1,3 @@
-$(document).ready(function(){
-    $("#left-panel").slideDown("slow").tabs();
-
-    var counter = 1;
-      $(".add").click(function(){
-
-        console.log(counter);
-        counter++;
-        if (counter > 4){
-          alert("Maximum 4 options for each survey!");
-          return false;
-        }else{
-            $('#newvote').append('<div id="vote'+ counter+ '" ><p>Options: </p><input type="text" name="option'+counter+'"> <input type="button" onclick="deleteTheEntireRow()" class="btn btn-secondary-outline remove" value="Remove"></div>');
-        }
-      });
-      $(".remove").click(function(){
-        $(this).parent().remove();
-        counter--;
-      });
-});
-
 //TODO: FIND HOW TO RESET SESSION VALUE
 
 var mapDiv = mapDiv = document.getElementById('map');

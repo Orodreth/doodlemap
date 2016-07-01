@@ -13,61 +13,68 @@
 </head>
 <body>
 
-    <input id="pac-input" class="controls" type="text" placeholder="Search Box">
+    <input id="pac-input" class="controls" type="text" value="{{location}}">
 
 	<div id="map">
-        <input id="initial_location" type="hidden" name="location" value="{{session['address']}}">
+        <input id="initial_location" type="hidden" name="location" value="hello">
         <input id="initial_latitude" type="hidden" name="latitude" value="{{session['latitude']}}">
         <input id="initial_longitude" type="hidden" name="longitude" value="{{session['longitude']}}">
         <input id="initial_id" type="hidden" name="placeid" value="{{session['placeid']}}">
 	</div>
 
 	<div id="left-panel">
-        <ul class="nav nav-tabs">
-          <li class="active"><a href="#info_tab" data-toggle="tab">Info</a></li>
-          <li><a href="#media_tab" data-toggle="tab">Media</a></li>
-          <li><a href="#survey_tab" data-toggle="tab">Survey</a></li>
-        </ul>
+       <ul class="nav nav-tabs">
+         <li class="active"><a href="#survey_tab" data-toggle="tab"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Survey</a></li>
+         <li><a href="#info_tab" data-toggle="tab"><i class="fa fa-home fa-fw" aria-hidden="true"></i> Info</a></li>
+         <li><a href="#media_tab" data-toggle="tab"><i class="fa fa-font-awesome" aria-hidden="true"></i> Media</a></li>
+       </ul>
 
-		<div class="tab-content clearfix">
-            <div class="tab-pane active" id="info_tab">
-                <p>asasasasasasasasasasasasas</p>
-            </div>
+        <div class="tab-content clearfix">
+           <div class="tab-pane active" id="info_tab">
+               <p>asasasasasasasasasasasasas</p>
+           </div>
 
-            <div class="tab-pane" id="media_tab">
-                <p>bababababababababababababb</p>
-            </div>
+           <div class="tab-pane" id="media_tab">
+               <p>bababababababababababababb</p>
+           </div>
 
-            <div class="tab-pane" id="survey_tab">
-                <p><i class="fa fa-bar-chart" aria-hidden="true"></i> Votes</p>
-                <!-- do a for loop after the data is passed -->
-              <div id ="existedvote">
-                <div class="votes"></div>
-                <div class="votes"></div>
-                <div class="votes"></div>
-                <div class="votes"></div>
-                <div class="votes"></div>
-                <div class="votes"></div>
-              </div>
-                <!-- do a for loop after the data is passed -->
-
-              <form action="#">
-                <div id="fix">
-                <div id="newvote">
-                  <p>Question:</p><textarea name="description"></textarea>
-                  <input type="button" class="btn btn-secondary-outline add" value="Add an option">
-                  <div id="vote1">
-                    <p>Options:</p><input type="text" name="option1">
-                    <input type="button" class="btn btn-secondary-outline remove" value="Remove">
+           <div class="tab-pane" id="survey_tab">
+               <p><i class="fa fa-bar-chart" aria-hidden="true"></i> Votes</p>
+               <!-- do a for loop after the data is passed -->
+               <div id ="existedvote">
+                 
+                 {% for key, value in surveys.items() %}
+                  <div class="votes">
+                  Question: {{key}}
+                    {% for item in value %}
+                      <br>
+                      Votes: {{item['count']}}
+                      <br>
+                      <a href = "/vote/{{item['opt_id']}}">{{item['opt']}}</a>
+                    {% endfor %}
                   </div>
-                </div>
-                </div>
-                <input type="submit" value="create">
-              </form>
-            </div>
-        </div>
-	</div>
-	<script src="static/js/script.js"></script>
-	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB6qaM40Um39N4vywpaU_Hj5NwoD2FB3PA&libraries=places&callback=initialize"></script>
+                 {% endfor %} 
+               </div>
+                 <!-- do a for loop after the data is passed -->
+
+               <form action="/map/create_survey" method="post">
+                 <div id="fix">
+                   <div id="newvote">
+                     <p>Question:</p><textarea name="description"></textarea>
+                     <input type="button" class="btn btn-secondary-outline add" value="Add an option">
+                     <div id="vote1">
+                       <p>Options:</p><input type="text" name="option1">
+                       <input type="button" class="btn btn-secondary-outline remove" value="Remove">
+                     </div>
+                   </div>
+                 </div>
+                 <input type="submit" value="create">
+               </form>
+           </div>
+       </div>
+    </div>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB6qaM40Um39N4vywpaU_Hj5NwoD2FB3PA&libraries=places"></script>
+	<script src="static/js/script_new.js"></script>
+
 </body>
 </html>

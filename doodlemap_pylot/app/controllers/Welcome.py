@@ -39,7 +39,10 @@ class Welcome(Controller):
 
         # return self.load_view('index.html', messages=messages, user=user)
         """
-        return self.load_view('index.html')
+        user_id = 0
+        if "user_id" in session:
+            user_id = session["user_id"]
+        return self.load_view('index.html', user_id = user_id)
 
     # data = {
     #     'address': session['address'],
@@ -57,81 +60,43 @@ class Welcome(Controller):
     # session['lng'] = g['geometry']['coordinates'][1]
     # print session['lng']
 
-    def _process(self):
+    def search(self):
 
         print request.form['address']
-
+		
         initial_location = request.form['address']
+        session['initial_location'] = initial_location
         g = geocoder.google(initial_location)
         geo = g.geojson
-
+		
         session['address'] = geo['properties']['address']
         session['latitude'] = geo['properties']['lat']
         session['longitude'] = geo['properties']['lng']
-
+		
         places_data = {
             'input': request.form['address'],
             'key': 'AIzaSyB6qaM40Um39N4vywpaU_Hj5NwoD2FB3PA'
         }
-
+		
         places_url = 'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=' \
                      + places_data['input'] +'&key='+ places_data['key']
         json_places = requests.get(places_url).content
         places_response = json.loads(json_places)
         session['placeid'] = places_response['predictions'][0]['place_id']
-
+		
         print 'Geos'
         print geo['properties']
         print places_response['predictions'][0]['place_id']
         print geo['properties']['address']
         print geo['properties']['lat']
         print geo['properties']['lng']
-
-
+		
+		
         print 'Sessions'
         print session['address']
         print session['latitude']
         print session['longitude']
         print session['placeid']
-
-    def search(self):
-
-        # print request.form['address']
-		#
-        # initial_location = request.form['address']
-        # g = geocoder.google(initial_location)
-        # geo = g.geojson
-		#
-        # session['address'] = geo['properties']['address']
-        # session['latitude'] = geo['properties']['lat']
-        # session['longitude'] = geo['properties']['lng']
-		#
-        # places_data = {
-        #     'input': request.form['address'],
-        #     'key': 'AIzaSyB6qaM40Um39N4vywpaU_Hj5NwoD2FB3PA'
-        # }
-		#
-        # places_url = 'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=' \
-        #              + places_data['input'] +'&key='+ places_data['key']
-        # json_places = requests.get(places_url).content
-        # places_response = json.loads(json_places)
-        # session['placeid'] = places_response['predictions'][0]['place_id']
-		#
-        # print 'Geos'
-        # print geo['properties']
-        # print places_response['predictions'][0]['place_id']
-        # print geo['properties']['address']
-        # print geo['properties']['lat']
-        # print geo['properties']['lng']
-		#
-		#
-        # print 'Sessions'
-        # print session['address']
-        # print session['latitude']
-        # print session['longitude']
-        # print session['placeid']
-
-        self._process()
 
 
         # places_details_data = {
@@ -150,6 +115,44 @@ class Welcome(Controller):
 
         return redirect('/map')
 
-    def refresh(self):
-       self. _process()
-       return jsonify("{}")
+    def refresh(self, address, id, latitude, longitude):
+        # print request.form['address']
+        
+        # initial_location = request.form['address']
+        # g = geocoder.google(initial_location)
+        # geo = g.geojson
+
+        print "expected some form request data: "
+        
+        session['address'] = address
+        session['latitude'] = latitude
+        session['longitude'] = longitude
+        session['placeid'] = id
+        
+        # places_data = {
+        #     'input': request.form['address'],
+        #     'key': 'AIzaSyB6qaM40Um39N4vywpaU_Hj5NwoD2FB3PA'
+        # }
+        
+        # places_url = 'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=' \
+        #              + places_data['input'] +'&key='+ places_data['key']
+        # json_places = requests.get(places_url).content
+        # places_response = json.loads(json_places)
+        # session['placeid'] = places_response['predictions'][0]['place_id']
+        
+        # print 'Geos'
+        # print geo['properties']
+        # print places_response['predictions'][0]['place_id']
+        # print geo['properties']['address']
+        # print geo['properties']['lat']
+        # print geo['properties']['lng']
+        
+        
+        print 'Sessions'
+        print session['address']
+        print session['latitude']
+        print session['longitude']
+        print session['placeid']
+
+        var_temp = {}
+        return jsonify(var_temp)
